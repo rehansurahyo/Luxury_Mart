@@ -19,9 +19,10 @@ class _SplashscreenState extends State<Splashscreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-           UiHelper.customImage(img: 'assets/images/check.png'),
-            
-          ],
+
+        UiHelper.customImage(img: 'luxurymartlight.png')
+
+        ],
         ),
       ),
     );
