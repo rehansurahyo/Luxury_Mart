@@ -1,294 +1,152 @@
 import 'package:flutter/material.dart';
-import '../../widgets/uihelper.dart';
+import 'package:get/get.dart';
+import '../../../data/models/product_model.dart';
+import '../../../features/auth/controllers/cart_controller.dart';
+import '../../../features/auth/controllers/product_controller.dart';
+import '../../../features/auth/screens/ProductDetailScreen.dart';
+import '../cart/cartScreen.dart';
 
-class Homescreen extends StatelessWidget {
-  final TextEditingController searchController = TextEditingController();
 
-  // Using one placeholder image
-  final List<Map<String, String>> data = [
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Lights, Diyas\n& Candles"},
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Diwali\nGifts"},
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Appliances\n& Gadgets"},
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Home\n& Living"},
-  ];
-
-  final List<Map<String, String>> category = [
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Golden Glass\nCandle (Oudh)"},
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Royal Gulab Jamun\nBy Bikano"},
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Golden Glass\nCandle (Oudh)"},
-  ];
-
-  final List<Map<String, String>> groceryKitchen = [
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Vegetables &\nFruits"},
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Atta, Dal &\nRice"},
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Oil, Ghee &\nMasala"},
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Dairy, Bread &\nMilk"},
-    {"img": "IMG-20250209-WA0005.jpg", "text": "Biscuits &\nBakery"},
-  ];
-
-  Widget safeImage(String path, {double size = 60}) {
-    return Image.asset(
-      'assets/images/$path',
-      height: size,
-      width: size,
-      fit: BoxFit.contain,
-      errorBuilder: (context, error, stackTrace) =>
-      const Icon(Icons.image_not_supported, size: 50, color: Colors.grey),
-    );
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key}) {
+    Get.put(ProductController());
+    Get.put(CartController());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 40),
+    final productController = Get.find<ProductController>();
+    final cartController = Get.find<CartController>();
 
-            // ===== Header =====
-            Stack(
-              children: [
-                Container(
-                  height: 190,
-                  width: double.infinity,
-                  color: const Color(0xFFEC0505),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF9F9F9),
+      appBar: AppBar(
+        title: const Text(
+          "Luxury Mart 🛍️",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black),
+            onPressed: () => Get.to(() => const CartScreen()),
+          ),
+        ],
+      ),
+      body: Obx(() {
+        if (productController.loading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (productController.products.isEmpty) {
+          return const Center(
+            child: Text(
+              "No products found 😔",
+              style: TextStyle(fontSize: 16),
+            ),
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: () async => productController.fetchProducts(),
+          child: GridView.builder(
+            padding: const EdgeInsets.all(10),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 0.72,
+            ),
+            itemCount: productController.products.length,
+            itemBuilder: (context, index) {
+              final ProductModel product = productController.products[index];
+
+              return GestureDetector(
+                onTap: () => Get.to(() => ProductDetailScreen(product: product)),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.12),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 30),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: UiHelper.customText(
-                          text: "Luxury Mart",
-                          color: Colors.white,
-                          fontweight: FontWeight.bold,
-                          fontsize: 15,
-                          fontfamily: "bold",
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: UiHelper.customText(
-                          text: "16 minutes",
-                          color: Colors.white,
-                          fontweight: FontWeight.bold,
-                          fontsize: 20,
-                          fontfamily: "bold",
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          const SizedBox(width: 20),
-                          UiHelper.customText(
-                            text: "HOME ",
-                            color: Colors.white,
-                            fontweight: FontWeight.bold,
-                            fontsize: 14,
-                          ),
-                          UiHelper.customText(
-                            text: "- Aligohrabad Larkana Pakistan",
-                            color: Colors.white,
-                            fontweight: FontWeight.bold,
-                            fontsize: 14,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const Positioned(
-                  right: 20,
-                  bottom: 100,
-                  child: CircleAvatar(
-                    radius: 15,
-                    backgroundColor: Colors.black,
-                    child: Icon(Icons.person, color: Colors.white, size: 20),
-                  ),
-                ),
-                Positioned(
-                  bottom: 30,
-                  left: 20,
-                  right: 20,
-                  child: UiHelper.customTextField(controller: searchController),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // ===== Mega Sale Section =====
-            Container(
-              width: double.infinity,
-              color: const Color(0xFFEC0505),
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Column(
-                children: [
-                  UiHelper.customText(
-                    text: "🎉 Mega Ramazan Sale 🎉",
-                    color: Colors.white,
-                    fontweight: FontWeight.bold,
-                    fontsize: 22,
-                    fontfamily: "bold",
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 150,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: data.length,
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Container(
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFEAD3D3),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                safeImage(data[index]["img"]!),
-                                const SizedBox(height: 5),
-                                UiHelper.customText(
-                                  text: data[index]["text"]!,
-                                  color: Colors.black,
-                                  fontweight: FontWeight.bold,
-                                  fontsize: 10,
-                                ),
-                              ],
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                          child: Image.network(
+                            product.image,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => Container(
+                              height: 120,
+                              color: Colors.grey[200],
+                              child: const Icon(Icons.image_not_supported, size: 50, color: Colors.grey),
                             ),
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // ===== Trending Section =====
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: UiHelper.customText(
-                text: "Trending Now",
-                color: Colors.black,
-                fontweight: FontWeight.bold,
-                fontsize: 16,
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 240, // increased height to prevent overflow
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: category.length,
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: safeImage(category[index]["img"]!, size: 100),
                         ),
-                        const SizedBox(height: 5),
-                        UiHelper.customText(
-                          text: category[index]["text"]!,
-                          color: Colors.black,
-                          fontweight: FontWeight.bold,
-                          fontsize: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        child: Text(
+                          product.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                         ),
-                        const SizedBox(height: 5),
-                        const Icon(Icons.timer, size: 14, color: Colors.grey),
-                        const SizedBox(height: 3),
-                        UiHelper.customText(
-                          text: "16 MINS",
-                          color: Colors.grey,
-                          fontweight: FontWeight.normal,
-                          fontsize: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          "Rs. ${product.price.toStringAsFixed(0)}",
+                          style: const TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
                         ),
-                        const SizedBox(height: 5),
-                        const Icon(Icons.currency_rupee,
-                            size: 14, color: Colors.grey),
-                        UiHelper.customText(
-                          text: "79",
-                          color: Colors.grey,
-                          fontweight: FontWeight.bold,
-                          fontsize: 13,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            // ===== Grocery & Kitchen =====
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: UiHelper.customText(
-                text: "Grocery & Kitchen",
-                color: Colors.black,
-                fontweight: FontWeight.bold,
-                fontsize: 16,
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 150,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: groceryKitchen.length,
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemBuilder: (context, index) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        height: 78,
-                        width: 71,
-                        margin: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD9EBEB),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: safeImage(groceryKitchen[index]["img"]!),
                       ),
                       const SizedBox(height: 4),
-                      UiHelper.customText(
-                        text: groceryKitchen[index]["text"]!,
-                        color: Colors.black,
-                        fontweight: FontWeight.normal,
-                        fontsize: 10,
-
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(double.infinity, 36),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                          onPressed: () {
+                            cartController.addToCart(product);
+                            Get.snackbar(
+                              "Added to Cart 🛒",
+                              "${product.name} added!",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: Colors.green.shade100,
+                              colorText: Colors.black,
+                              duration: const Duration(seconds: 2),
+                              margin: const EdgeInsets.all(10),
+                            );
+                          },
+                          child: const Text("Add to Cart"),
+                        ),
                       ),
                     ],
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 40),
-          ],
-        ),
-      ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      }),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:luxury_mart/repository/Screens/cart/cartScreen.dart';
 import 'package:luxury_mart/repository/Screens/category/categoryScreen.dart';
 import 'package:luxury_mart/repository/Screens/home/homeScreen.dart';
-import 'package:luxury_mart/repository/Screens/print/printScreen.dart';
+
 import 'package:iconsax/iconsax.dart';
 class BottomNavScreen extends StatefulWidget {
   const BottomNavScreen({super.key});
@@ -14,10 +14,10 @@ class BottomNavScreen extends StatefulWidget {
 class _BottomNavsSreenState extends State<BottomNavScreen> {
   int currentIndex = 0;
   List<Widget>pages =[
-    Homescreen(),
+    HomeScreen(),
     CartScreen(),
     CategoryScreen(),
-    PrintScreen(),
+
 
   ];
   @override

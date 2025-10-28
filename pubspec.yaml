@@ -10,8 +10,28 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # ---------------- UI Icons ----------------
   cupertino_icons: ^1.0.8
   iconsax: ^0.0.8
+  lottie: ^3.1.0
+  cached_network_image: ^3.3.1
+  path_provider: ^2.1.4
+
+  # ---------------- Firebase Packages (Latest Compatible) ----------------
+  firebase_core: ^3.8.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.6.12
+  firebase_storage: ^12.3.4
+  firebase_messaging: ^15.1.2
+
+  # ---------------- State Management ----------------
+  get: ^4.6.6
+
+  # ---------------- Utilities ----------------
+  shared_preferences: ^2.3.2
+  uuid: ^4.4.2
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
@@ -21,11 +41,11 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # Image assets folder
+  # ---------------- Image Assets ----------------
   assets:
     - assets/images/
 
-  # Custom fonts configuration
+  # ---------------- Custom Fonts ----------------
   fonts:
     - family: bold
       fonts:
