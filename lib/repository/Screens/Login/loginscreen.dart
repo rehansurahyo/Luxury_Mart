@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:luxury_mart/repository/Screens/Bottom%20navigation/bottomNavScreen.dart';
-import 'package:luxury_mart/repository/widgets/uihelper.dart';
+import 'package:luxury_mart/utils/helpers/uihelper.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});

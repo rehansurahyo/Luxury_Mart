@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 import '../../../repository/Screens/order.dart';
-import '../../../repository/order_repository.dart';
+import '../../../repository/repositories/order_repository.dart';
 import 'cart_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

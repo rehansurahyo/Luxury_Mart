@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Data/models/CategoryModel.dart';
+import '../../Data/models/CategoryModel.dart';
 
 
 class CategoryRepository {

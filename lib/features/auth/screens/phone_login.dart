@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:luxury_mart/repository/widgets/uihelper.dart';
+import 'package:luxury_mart/utils/helpers/uihelper.dart';
 import '../controllers/auth_controller.dart';
 import '../widgets/loader_overlay.dart';
 

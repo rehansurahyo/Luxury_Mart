@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/uihelper.dart';
+import '../../../utils/helpers/uihelper.dart';
 
 class CategoryScreen extends StatelessWidget {
   CategoryScreen({super.key});

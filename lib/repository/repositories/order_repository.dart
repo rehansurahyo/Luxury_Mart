@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'Screens/order.dart';
+import '../Screens/order.dart';
 
 class OrderRepository {
   final _db = FirebaseFirestore.instance;

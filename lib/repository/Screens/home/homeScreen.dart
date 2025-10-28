@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../../data/models/product_model.dart';
 import '../../../features/auth/controllers/cart_controller.dart';
 import '../../../features/auth/controllers/product_controller.dart';
-import '../../../features/auth/screens/ProductDetailScreen.dart';
+import '../../widgets/ProductDetailScreen.dart';
 import '../cart/cartScreen.dart';
 
 

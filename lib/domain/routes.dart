@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import '../../../repository/Screens/cart/cartScreen.dart';
-import '../../../repository/Screens/checkout_screen.dart';
-import '../../../repository/Screens/home/homeScreen.dart';
-import '../../../repository/Screens/splash/splashscreen.dart';
-import '../screens/OTPVerificationScreen.dart';
-import '../screens/phone_login.dart';
+import '../repository/Screens/cart/cartScreen.dart';
+import '../repository/Screens/checkout_screen.dart';
+import '../repository/Screens/home/homeScreen.dart';
+import '../repository/Screens/splash/splashscreen.dart';
+import '../features/auth/screens/OTPVerificationScreen.dart';
+import '../features/auth/screens/phone_login.dart';
 
 
 class Routes {
